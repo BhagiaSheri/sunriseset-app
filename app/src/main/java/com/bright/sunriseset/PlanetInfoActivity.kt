@@ -33,12 +33,19 @@ class PlanetInfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Get the current configuration
+        val config = resources.configuration
+
+        // Create a new configuration with the desired locale
+        val newLocale = Locale("zh") // Set the desired language code (e.g., "zh" for Chinese)
+        config.setLocale(newLocale)
+
+        // Update the configuration for the activity
+        resources.updateConfiguration(config, resources.displayMetrics)
+
         // Inflate the layout using View Binding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Get the current time
-        val currentTime = LocalDateTime.now()
 
         // Asynchronously fetch sunrise and sunset times
         GlobalScope.launch(Dispatchers.Main) {
@@ -73,10 +80,10 @@ class PlanetInfoActivity : AppCompatActivity() {
      */
     private fun getLocalizedTime(time: LocalDateTime, context: Context): String {
         // Retrieve the user's preferred language from the device settings
-        val userPreferredLanguage = Locale.getDefault().language
+        val userPreferredLanguage = Locale.CHINESE
 
         // Create a SimpleDateFormat with the user's preferred language
-        val sdf = SimpleDateFormat("hh:mm a", Locale(userPreferredLanguage))
+        val sdf = SimpleDateFormat("hh:mm a", userPreferredLanguage)
 
         // Format the LocalDateTime into a string using the specified SimpleDateFormat
         return sdf.format(
